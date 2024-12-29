@@ -169,3 +169,46 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment directories
+env/
+venv/
+ENV/
+VENV/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore compiled files
+*.o
+*.so
+*.a
+*.out
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore build directories
+build/
+dist/
+*.egg-info/
+
+# Ignore node_modules
+node_modules/
