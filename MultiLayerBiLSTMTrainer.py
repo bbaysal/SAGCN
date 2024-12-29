@@ -5,6 +5,7 @@ from typing import List, Tuple, Dict
 import time
 import matplotlib.pyplot as plt
 from BiLSTM import MultiLayerBiLSTM
+from tqdm import tqdm
 
 
 class TwitterMultiLayerBiLSTMSystem:
@@ -64,8 +65,10 @@ class TwitterMultiLayerBiLSTMSystem:
         # Use GPU if available
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.bert_model.to(device)
-
-        for text, target, label in zip(texts, targets, labels):
+        index = 0
+        for text, target, label in tqdm(zip(texts, targets, labels), 
+                                        desc="Data Preparing", 
+                                        total=len(texts)):
             # Replace $T$ with actual target
             full_text = text.replace('$T$', target)
 
