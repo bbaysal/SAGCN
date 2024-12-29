@@ -130,7 +130,7 @@ class MultiLayerBiLSTM:
         current_input = X
 
         # Process through each BiLSTM layer
-        for layer in self.layers:
+        for layer in self.bilstm_layers:
             current_input = layer.forward(current_input)
 
         # Final output layer
