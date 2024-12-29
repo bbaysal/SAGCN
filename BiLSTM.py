@@ -111,6 +111,57 @@ class MultiLayerBiLSTM:
         # Initialize BiLSTM layers
         for i in range(num_layers):
             if i == 0:
+                self.bilstm_layers.append(BiLSTM(input_dim, hidden_dim, hidden_dim))
+            else:
+                self.bilstm_layers.append(BiLSTM(hidden_dim, hidden_dim, hidden_dim))
+
+        # Output layer weights
+        self.Wy = np.random.randn(output_dim, hidden_dim) * 0.01
+        self.by = np.zeros((output_dim, 1))
+
+    def softmax(self, x):
+        exp_x = np.exp(x - np.max(x))  # for numerical stability
+        return exp_x / exp_x.sum(axis=0, keepdims=True)
+
+    def forward(self, X):
+        # Ensure X is a numpy array
+        if isinstance(X, list):
+            X = np.array(X)
+        
+        # Get dimensions
+        batch_size, seq_len, input_dim = X.shape
+        current_input = X
+
+        # Process through each BiLSTM layer
+        for layer in self.bilstm_layers:
+            layer_outputs = []
+            # Process each sequence in the batch
+            for b in range(batch_size):
+                sequence = current_input[b]
+                layer_output = layer.forward(sequence.reshape(1, seq_len, -1))
+                layer_outputs.extend(layer_output)
+            
+            # Reshape outputs for next layer
+            current_input = np.array(layer_outputs).reshape(batch_size, seq_len, -1)
+
+        # Final output layer
+        outputs = []
+        for b in range(batch_size):
+            sequence_outputs = []
+            for t in range(seq_len):
+                hidden = current_input[b, t].reshape(-1, 1)
+                y = np.dot(self.Wy, hidden) + self.by
+                sequence_outputs.append(self.softmax(y))
+            outputs.append(sequence_outputs)
+
+        return outputs
+    def __init__(self, input_dim, hidden_dim, output_dim, num_layers):
+        self.num_layers = num_layers
+        self.bilstm_layers = []
+
+        # Initialize BiLSTM layers
+        for i in range(num_layers):
+            if i == 0:
                 self.bilstm_layers.append(
                     BiLSTM(input_dim, hidden_dim, hidden_dim))
             else:

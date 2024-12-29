@@ -352,7 +352,7 @@ class MultiLayerBiLSTMTrainer:
                 batch_indices = indices[start_idx:start_idx + batch_size]
                 X_batch = X[batch_indices]
                 y_batch = y[batch_indices]
-
+                X_batch = np.array(X_batch) 
                 # Forward pass
                 predictions = self.model.forward(X_batch)
 
